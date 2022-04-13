@@ -12,9 +12,18 @@ type DeploymentState =
 
 async function run() {
   try {
+    core.warning(JSON.stringify(process.env));
     const context = github.context;
+    const issue = github.context.issue;
+    core.warning(JSON.stringify(issue));
     const deployment_id = core.getState("deployment_id");
     const defaultUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${context.sha}/checks`;
+
+    // ctokit.rest.actions.getJobForWorkflowRun({
+    //   owner,
+    //   repo,
+    //   job_id,
+    // });
 
     const token = core.getInput("token", { required: true });
     const url = core.getInput("target_url", { required: false }) || defaultUrl;
