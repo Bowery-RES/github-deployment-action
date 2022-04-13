@@ -16,12 +16,6 @@ async function run() {
     const issue = github.context.issue;
     const deployment_id = core.getState("deployment_id");
     const defaultUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${context.sha}/checks`;
-    core.warning(JSON.stringify(context, null, 2));
-    // ctokit.rest.actions.getJobForWorkflowRun({
-    //   owner,
-    //   repo,
-    //   job_id,
-    // });
 
     const token = core.getInput("token", { required: true });
     const url = core.getInput("target_url", { required: false }) || defaultUrl;
@@ -29,7 +23,6 @@ async function run() {
     const description = core.getInput("description", { required: false }) || "";
     const environmentUrl =
       core.getInput("environment_url", { required: false }) || "";
-    const state = "success" as DeploymentState;
 
     const client = github.getOctokit(token).rest;
 
@@ -37,16 +30,30 @@ async function run() {
       ...issue,
       run_id: context.runId,
     });
-    core.warning(JSON.stringify(workflowRun, null, 2));
+
+    const currentJob = workflowRun.data.jobs.find(
+      (job) => job.run_id === context.runId && job.status === "in_progress"
+    );
+
+    const failedStep = currentJob?.steps?.find(
+      (step) => step.conclusion === "failure" && step.status === "completed"
+    );
+    if (failedStep) {
+      core.error(`The following step failed, deployment is not succeded`);
+      core.error(JSON.stringify(failedStep, null, 2));
+    }
+
+    const state = failedStep ? "failure" : "success";
+
     await client.repos.createDeploymentStatus({
       ...context.repo,
-      auto_inactive: true,
       deployment_id: parseInt(deployment_id),
       state,
       log_url: logUrl,
       target_url: url,
       description,
       environment_url: environmentUrl,
+      auto_inactive: true,
     });
   } catch (error) {
     core.error(error);
