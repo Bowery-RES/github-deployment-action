@@ -5102,7 +5102,7 @@ function run() {
                 core.error(JSON.stringify(failedStep, null, 2));
             }
             const state = failedStep ? "failure" : "success";
-            yield client.repos.createDeploymentStatus(Object.assign(Object.assign({}, context.repo), { deployment_id: parseInt(deployment_id), state, log_url: logUrl, target_url: url, description, environment_url: url, auto_inactive: true }));
+            yield client.repos.createDeploymentStatus(Object.assign(Object.assign({}, context.repo), { deployment_id: parseInt(deployment_id), state, log_url: logUrl, description, environment_url: url, auto_inactive: true }));
         }
         catch (error) {
             core.error(error);

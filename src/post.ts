@@ -48,7 +48,6 @@ async function run() {
       deployment_id: parseInt(deployment_id),
       state,
       log_url: logUrl,
-      target_url: url,
       description,
       environment_url: url,
       auto_inactive: true,

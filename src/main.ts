@@ -17,6 +17,7 @@ async function run() {
 
     const token = core.getInput("token", { required: true });
     const ref = core.getInput("ref", { required: false }) || context.ref;
+
     const url = core.getInput("target_url", { required: false }) || logUrl;
     const environment =
       core.getInput("environment", { required: false }) || "production";
