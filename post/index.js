@@ -5093,7 +5093,6 @@ function run() {
             const url = core.getInput("target_url", { required: false }) || defaultUrl;
             const logUrl = core.getInput("log_url", { required: false }) || defaultUrl;
             const description = core.getInput("description", { required: false }) || "";
-            const environmentUrl = core.getInput("environment_url", { required: false }) || "";
             const client = github.getOctokit(token).rest;
             const workflowRun = yield client.actions.listJobsForWorkflowRun(Object.assign(Object.assign({}, issue), { run_id: context.runId }));
             const currentJob = workflowRun.data.jobs.find((job) => job.run_id === context.runId && job.status === "in_progress");
@@ -5103,7 +5102,7 @@ function run() {
                 core.error(JSON.stringify(failedStep, null, 2));
             }
             const state = failedStep ? "failure" : "success";
-            yield client.repos.createDeploymentStatus(Object.assign(Object.assign({}, context.repo), { deployment_id: parseInt(deployment_id), state, log_url: logUrl, target_url: url, description, environment_url: environmentUrl, auto_inactive: true }));
+            yield client.repos.createDeploymentStatus(Object.assign(Object.assign({}, context.repo), { deployment_id: parseInt(deployment_id), state, log_url: logUrl, target_url: url, description, environment_url: url, auto_inactive: true }));
         }
         catch (error) {
             core.error(error);

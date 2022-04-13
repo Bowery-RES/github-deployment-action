@@ -21,8 +21,6 @@ async function run() {
     const url = core.getInput("target_url", { required: false }) || defaultUrl;
     const logUrl = core.getInput("log_url", { required: false }) || defaultUrl;
     const description = core.getInput("description", { required: false }) || "";
-    const environmentUrl =
-      core.getInput("environment_url", { required: false }) || "";
 
     const client = github.getOctokit(token).rest;
 
@@ -52,7 +50,7 @@ async function run() {
       log_url: logUrl,
       target_url: url,
       description,
-      environment_url: environmentUrl,
+      environment_url: url,
       auto_inactive: true,
     });
   } catch (error) {
