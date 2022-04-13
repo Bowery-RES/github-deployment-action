@@ -31,4 +31,4 @@ outputs:
 runs:
   using: "node12"
   main: "main/index.js"
-  post: post/post.js
+  post: post/index.js
