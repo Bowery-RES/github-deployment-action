@@ -5101,7 +5101,7 @@ function run() {
             const environmentUrl = core.getInput("environment_url", { required: false }) || "";
             const state = "success";
             const client = github.getOctokit(token).rest;
-            const workflowRun = yield client.actions.listJobsForWorkflowRunAttempt(Object.assign(Object.assign({}, issue), { run_id: context.runId, attempt_number: context.runNumber }));
+            const workflowRun = yield client.actions.listJobsForWorkflowRun(Object.assign(Object.assign({}, issue), { run_id: context.runId }));
             core.warning(JSON.stringify(workflowRun, null, 2));
             yield client.repos.createDeploymentStatus(Object.assign(Object.assign({}, context.repo), { auto_inactive: true, deployment_id: parseInt(deployment_id), state, log_url: logUrl, target_url: url, description, environment_url: environmentUrl }));
         }

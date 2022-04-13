@@ -33,10 +33,9 @@ async function run() {
 
     const client = github.getOctokit(token).rest;
 
-    const workflowRun = await client.actions.listJobsForWorkflowRunAttempt({
+    const workflowRun = await client.actions.listJobsForWorkflowRun({
       ...issue,
       run_id: context.runId,
-      attempt_number: context.runNumber,
     });
     core.warning(JSON.stringify(workflowRun, null, 2));
     await client.repos.createDeploymentStatus({
