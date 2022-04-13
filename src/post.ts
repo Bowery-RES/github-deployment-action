@@ -12,13 +12,13 @@ type DeploymentState =
 
 async function run() {
   try {
-    core.warning(JSON.stringify(process.env));
+    core.warning(JSON.stringify(process, null, 2));
     const context = github.context;
     const issue = github.context.issue;
     core.warning(JSON.stringify(issue));
     const deployment_id = core.getState("deployment_id");
     const defaultUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${context.sha}/checks`;
-
+    core.warning(JSON.stringify(context, null, 2));
     // ctokit.rest.actions.getJobForWorkflowRun({
     //   owner,
     //   repo,
@@ -35,6 +35,11 @@ async function run() {
 
     const client = github.getOctokit(token).rest;
 
+    const workflowRun = await client.actions.getWorkflowRun({
+      ...issue,
+      run_id: context.runId,
+    });
+    core.warning(JSON.stringify(workflowRun, null, 2));
     await client.repos.createDeploymentStatus({
       ...context.repo,
       auto_inactive: true,
