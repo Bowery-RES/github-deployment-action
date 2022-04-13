@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "pack": "ncc build"
+    "pack": "ncc build lib/main.js -o main/ && ncc build lib/post.js -o post/"
   },
   "repository": {
     "type": "git",
@@ -21,8 +21,8 @@
   "author": "YourNameOrOrganization",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.0.0",
-    "@actions/github": "^1.1.0"
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.1"
   },
   "devDependencies": {
     "@types/jest": "^24.0.13",
@@ -31,6 +31,6 @@
     "jest": "^25.1.0",
     "jest-circus": "^25.1.0",
     "ts-jest": "^24.0.2",
-    "typescript": "^3.5.1"
+    "typescript": "^3.9.9"
   }
 }

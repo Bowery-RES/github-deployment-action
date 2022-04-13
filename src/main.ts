@@ -23,15 +23,15 @@ async function run() {
     const description = core.getInput("description", { required: false });
     const initialStatus =
       (core.getInput("initial_status", {
-        required: false
+        required: false,
       }) as DeploymentState) || "pending";
     const autoMergeStringInput = core.getInput("auto_merge", {
-      required: false
+      required: false,
     });
 
     const auto_merge: boolean = autoMergeStringInput === "true";
 
-    const client = new github.GitHub(token, { previews: ["flash", "ant-man"] });
+    const client = github.getOctokit(token).rest;
 
     const deployment = await client.repos.createDeployment({
       owner: context.repo.owner,
@@ -41,18 +41,20 @@ async function run() {
       environment,
       transient_environment: true,
       auto_merge,
-      description
+      description,
     });
-
+    core.warning(JSON.stringify(deployment.data));
+    const deploymentId = (deployment.data as any).id;
     await client.repos.createDeploymentStatus({
       ...context.repo,
-      deployment_id: deployment.data.id,
+      deployment_id: deploymentId,
       state: initialStatus,
       log_url: logUrl,
-      environment_url: url
+      environment_url: url,
     });
 
-    core.setOutput("deployment_id", deployment.data.id.toString());
+    core.setOutput("deployment_id", deploymentId.toString());
+    core.saveState("deployment_id", deploymentId.toString());
   } catch (error) {
     core.error(error);
     core.setFailed(error.message);

@@ -30,4 +30,5 @@ outputs:
     description: "The ID of the created deployment"
 runs:
   using: "node12"
-  main: "dist/index.js"
+  main: "main/index.js"
+  post: post/post.js
