@@ -5084,10 +5084,8 @@ const github = __importStar(__webpack_require__(469));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            core.warning(JSON.stringify(process, null, 2));
             const context = github.context;
             const issue = github.context.issue;
-            core.warning(JSON.stringify(issue));
             const deployment_id = core.getState("deployment_id");
             const defaultUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${context.sha}/checks`;
             core.warning(JSON.stringify(context, null, 2));
@@ -5103,7 +5101,7 @@ function run() {
             const environmentUrl = core.getInput("environment_url", { required: false }) || "";
             const state = "success";
             const client = github.getOctokit(token).rest;
-            const workflowRun = yield client.actions.getWorkflowRun(Object.assign(Object.assign({}, issue), { run_id: context.runId }));
+            const workflowRun = yield client.actions.listJobsForWorkflowRunAttempt(Object.assign(Object.assign({}, issue), { run_id: context.runId, attempt_number: context.runNumber }));
             core.warning(JSON.stringify(workflowRun, null, 2));
             yield client.repos.createDeploymentStatus(Object.assign(Object.assign({}, context.repo), { auto_inactive: true, deployment_id: parseInt(deployment_id), state, log_url: logUrl, target_url: url, description, environment_url: environmentUrl }));
         }
