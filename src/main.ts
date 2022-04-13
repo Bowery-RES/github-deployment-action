@@ -43,8 +43,11 @@ async function run() {
       auto_merge,
       description,
     });
-    core.warning(JSON.stringify(deployment.data));
     const deploymentId = (deployment.data as any).id;
+    if (!deploymentId) {
+      throw new Error("'deploymentId' is not defined");
+    }
+
     await client.repos.createDeploymentStatus({
       ...context.repo,
       deployment_id: deploymentId,
