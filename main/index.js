@@ -830,7 +830,7 @@ function run() {
             const context = github.context;
             const logUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${context.sha}/checks`;
             const token = core.getInput("token", { required: true });
-            const url = core.getInput("target_url", { required: false }) || logUrl;
+            const url = core.getInput("url", { required: false }) || logUrl;
             const environment = core.getInput("environment", { required: false }) || "production";
             const description = core.getInput("description", { required: false });
             const client = github.getOctokit(token).rest;
