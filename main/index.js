@@ -840,7 +840,6 @@ function run() {
                 ref: context.ref,
                 required_contexts: [],
                 environment,
-                transient_environment: true,
                 auto_merge: false,
                 description,
             });
